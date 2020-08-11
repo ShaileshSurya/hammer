@@ -2,11 +2,15 @@ package requesto
 
 // Constants for HTTP verbs.
 const (
-	GET    = "GET"
-	POST   = "POST"
-	PUT    = "PUT"
-	PATCH  = "PATCH"
-	DELETE = "DELETE"
+	GET     = "GET"
+	HEAD    = "HEAD"
+	POST    = "POST"
+	PUT     = "PUT"
+	PATCH   = "PATCH"
+	DELETE  = "DELETE"
+	CONNECT = "CONNECT"
+	OPTIONS = "OPTIONS"
+	TRACE   = "TRACE"
 )
 
 // ConstantErr

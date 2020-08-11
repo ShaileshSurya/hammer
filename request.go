@@ -11,10 +11,17 @@ type Request struct {
 	httpVerb string
 	baseURL  string
 	endpoint string
+	url      string
 	err      constantErr
 	headers  map[string]string
 	requesto *Requesto
 	into     interface{}
+}
+
+func initRequest() *Request {
+	return &Request{
+		headers: make(map[string]string),
+	}
 }
 
 func (r *Request) checkError() error {
@@ -24,10 +31,38 @@ func (r *Request) checkError() error {
 	return nil
 }
 
+// RequestBuilder ...
+func RequestBuilder() *Request {
+	return initRequest()
+}
+
 // WithHeaders ...
 func (r *Request) WithHeaders(key string, value string) *Request {
 	r.headers[key] = value
 	return r
+}
+
+// WithURL ...
+func (r *Request) WithURL(value string) *Request {
+	r.url = value
+	return r
+}
+
+// Get ...
+func (r *Request) Get() *Request {
+	r.httpVerb = GET
+	return r
+}
+
+// Build will do basic validations.
+func (r *Request) Build() (*Request, error) {
+	if "" == r.httpVerb {
+		return nil, errors.New("No HttpVerb Provided")
+	}
+	if "" == r.url {
+		return nil, errors.New("No Url Provided")
+	}
+	return r, nil
 }
 
 // Into ...
