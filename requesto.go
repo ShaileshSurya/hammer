@@ -52,40 +52,26 @@ func (r *Requesto) getHTTPClient() *http.Client {
 	return r.HTTPClient
 }
 
-/**
-
-client := &http.Client{}
-  request, err := http.NewRequest("GET", "http://example.com", nil)
-
-          if err != nil {
-                  log.Fatalln(err)
-          }
-  request.Header.Set("User-Agent", "[your user-agent name]")
-  resp, err := client.Do(req)
-
-*/
 // Execute ...
 func (r *Requesto) Execute(req *Request) (*http.Response, error) {
 	httpClient := r.getHTTPClient()
 
 	switch req.httpVerb {
 	case GET:
-		fmt.Println("~~~~~~~~~~~~~~~~HERE in GET Switch~~~~~~~~~~~~")
 		request, err := http.NewRequest(GET, req.url, nil)
 		if err != nil {
-			fmt.Println("Log While creating request")
 			return nil, errors.New("Log While creating request")
 		}
+
 		for k, v := range req.headers {
 			request.Header.Set(k, v)
 		}
-		PrettyPrint(request)
+
 		resp, err := httpClient.Do(request)
 		if err != nil {
-			fmt.Println("~~~~~~~~~~~~~~~~HERE in Error~~~~~~~~~~~~")
 			return resp, err
 		}
-		fmt.Println("~~~~~~~~~~~~~~~~HERE After Error~~~~~~~~~~~~")
+		return resp, err
 	default:
 		return nil, nil
 	}
@@ -108,6 +94,7 @@ func (r *Requesto) ExecuteInto(req *Request, value interface{}) error {
 
 	err = json.Unmarshal([]byte(body), value)
 	if err != nil {
+		fmt.Println(err)
 		return errors.New(RespDecodeErrorx)
 	}
 	return nil

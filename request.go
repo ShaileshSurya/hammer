@@ -8,19 +8,21 @@ import (
 
 // Request ...
 type Request struct {
-	httpVerb string
-	baseURL  string
-	endpoint string
-	url      string
-	err      constantErr
-	headers  map[string]string
-	requesto *Requesto
-	into     interface{}
+	httpVerb      string
+	baseURL       string
+	endpoint      string
+	url           string
+	err           constantErr
+	headers       map[string]string
+	requesto      *Requesto
+	into          interface{}
+	requestParams map[string]string
 }
 
 func initRequest() *Request {
 	return &Request{
-		headers: make(map[string]string),
+		headers:       make(map[string]string),
+		requestParams: make(map[string]string),
 	}
 }
 
@@ -39,6 +41,12 @@ func RequestBuilder() *Request {
 // WithHeaders ...
 func (r *Request) WithHeaders(key string, value string) *Request {
 	r.headers[key] = value
+	return r
+}
+
+// WithParams ...
+func (r *Request) WithParams(key string, value string) *Request {
+	r.requestParams[key] = value
 	return r
 }
 
@@ -61,6 +69,17 @@ func (r *Request) Build() (*Request, error) {
 	}
 	if "" == r.url {
 		return nil, errors.New("No Url Provided")
+	}
+
+	if r.requestParams != nil {
+		reqParamString := "?"
+		for k, v := range r.requestParams {
+			if reqParamString != "?" {
+				reqParamString += "&"
+			}
+			reqParamString = reqParamString + k + `=` + v
+		}
+		r.url = r.url + reqParamString
 	}
 	return r, nil
 }
