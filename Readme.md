@@ -17,8 +17,8 @@ Golang's Fluent HTTP Request Client
     client := &requesto.Requesto{}
 	resp, err := client.Get("http://localhost:8081/employee").
 		WithHeaders("Accept", "application/json").
-        WithHeaders("user-id", "10000").
-        WithParams("department","HR")
+        	WithHeaders("user-id", "10000").
+        	WithParams("department","HR")
 		Into(&employee{}).
 		Execute()
 ```
@@ -75,8 +75,8 @@ reqTemp, err := requesto.RequestBuilder().
 
 request, err := requesto.RequestBuilder().
 		WithTemplate(reqTemp).
-        WithParams("post","manager").
-        WithParams("centre","pune")
+        	WithParams("post","manager").
+        	WithParams("centre","pune")
 		Build()
 
 employeeList := []Employee{}
