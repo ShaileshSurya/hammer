@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/ShaileshSurya/requesto.svg?branch=master)](https://travis-ci.org/ShaileshSurya/requesto)
+
 # Requesto
 
 Golang's Fluent HTTP Request Client 
