@@ -11,9 +11,9 @@ Golang's Fluent HTTP Request Client
 ## Recipes
 
 ```
-client := &requesto.Requesto{}
+client := requesto.New()
 request, err := requesto.RequestBuilder().
-		Get().
+		<HttpVerb>().
 		WithURL("http://localhost:8081/employee").
 		WithHeaders("Accept", "application/json").
 		WithHeaders("user-id", "10062").
@@ -22,6 +22,50 @@ request, err := requesto.RequestBuilder().
 
 resp, err:= client.Execute(request)
 
+or 
+
+map := make(map[string]interface{})
+resp.err:= client.ExecuteInto(request, &map)
+
+or 
+
+model := Employee{}
+resp.err:= client.ExecuteInto(request, &model)
+
+```
+
+### Supported HTTP Verbs
+```
+GET     
+HEAD    
+POST    
+PUT    
+PATCH  
+DELETE  
+CONNECT 
+OPTIONS 
+TRACE   
+```
+
+### Request Builder Methods
+```
+// WithRequestBody ....
+WithRequestBody(body interface{}) 
+
+// WithHeaders ...
+WithHeaders(key string, value string)
+
+// WithRequestParams ...
+WithRequestParams(key string, value string) 
+
+// WithRequestBodyParams ...
+WithRequestBodyParams(key string, value interface{}) 
+
+// WithURL ...
+WithURL(value string) 
+
+// WithBasicAuth ...
+WithBasicAuth(username, password string)
 ```
 
 

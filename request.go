@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"reflect"
 )
 
 // Request ...
@@ -24,6 +25,12 @@ type Request struct {
 	Requesto          *Requesto
 	requestBodyParams map[string]interface{}
 	requestBody       []byte
+	basicAuth
+}
+
+type basicAuth struct {
+	username string
+	password string
 }
 
 func initRequest() *Request {
@@ -44,6 +51,13 @@ func (r *Request) checkError() error {
 // RequestBuilder ...
 func RequestBuilder() *Request {
 	return initRequest()
+}
+
+// WithRequestBody ....
+func (r *Request) WithRequestBody(body interface{}) *Request {
+	bodyData, _ := json.Marshal(body)
+	r.requestBody = bodyData
+	return r
 }
 
 // WithHeaders ...
@@ -67,6 +81,15 @@ func (r *Request) WithRequestBodyParams(key string, value interface{}) *Request 
 // WithURL ...
 func (r *Request) WithURL(value string) *Request {
 	r.url = value
+	return r
+}
+
+// WithBasicAuth ...
+func (r *Request) WithBasicAuth(user, pass string) *Request {
+	r.basicAuth = basicAuth{
+		username: user,
+		password: pass,
+	}
 	return r
 }
 
@@ -137,13 +160,6 @@ func (r *Request) Trace() *Request {
 	return r
 }
 
-// WithRequestBody ....
-func (r *Request) WithRequestBody(body interface{}) *Request {
-	bodyData, _ := json.Marshal(body)
-	r.requestBody = bodyData
-	return r
-}
-
 // Build will do basic validations.
 func (r *Request) Build() (*Request, error) {
 	if err := r.checkError(); err != nil {
@@ -177,13 +193,14 @@ func (r *Request) Build() (*Request, error) {
 }
 
 // TODO : UT for this.
-func (r *Request) doRequest(httpClient *http.Client) (*http.Response, error) {
+// TODO : Break this function.
+func (r *Request) doRequest(client httpOperations) (*http.Response, error) {
 
 	reqBody := func(body []byte) *bytes.Buffer {
 		if len(body) != 0 {
 			return bytes.NewBuffer(body)
 		}
-		return nil
+		return &bytes.Buffer{}
 	}(r.requestBody)
 
 	request, err := http.NewRequest(r.httpVerb, r.url, reqBody)
@@ -194,11 +211,16 @@ func (r *Request) doRequest(httpClient *http.Client) (*http.Response, error) {
 		request.Header.Set(k, v)
 	}
 
-	command, _ := GetCurlCommand(request)
+	//Add Basic auth
+	if !reflect.DeepEqual(r.basicAuth, basicAuth{}) {
+		request.SetBasicAuth(r.basicAuth.username, r.basicAuth.password)
+		r.basicAuth = basicAuth{}
+	}
 
-	r.Requesto.logMessage(command.String())
+	// command, _ := GetCurlCommand(request)
+	// r.Requesto.logMessage(command.String())
 
-	resp, doerr := httpClient.Do(request)
+	resp, doerr := client.Do(request)
 	if doerr != nil {
 		return resp, doerr
 	}

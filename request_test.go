@@ -99,6 +99,18 @@ func TestWithURL(t *testing.T) {
 	}
 }
 
+func TestWithBasicAuth(t *testing.T) {
+
+	req := RequestBuilder().WithBasicAuth("user", "pass")
+
+	if !reflect.DeepEqual(req.basicAuth, basicAuth{
+		username: "user",
+		password: "pass",
+	}) {
+		t.Error("Test Failed: TestWithBasicAuth")
+	}
+}
+
 func TestWithID(t *testing.T) {
 	urlx := "http://localhost:8081/"
 	id := "8s09df890asd8"
@@ -178,6 +190,67 @@ func TestWithRequestBody(t *testing.T) {
 	}
 }
 
+func TestDoRequestErr(t *testing.T) {
+	req := &Request{
+		url:         "http:localhost:8081/",
+		httpVerb:    POST,
+		requestBody: []byte(`bodySample`),
+		headers: map[string]string{
+			"key":  "value",
+			"key2": "value2",
+		},
+		basicAuth: basicAuth{
+			username: "user",
+			password: "pass",
+		},
+	}
+
+	if _, err := req.doRequest(MockClient{}); err != nil {
+		t.Error("Test Failed:TestDoRequestErr ")
+	}
+	req.requestBody = []byte(``)
+	if _, err := req.doRequest(MockClient{}); err != nil {
+		t.Error("Test Failed:TestDoRequestErr ")
+	}
+
+	if _, err := req.doRequest(MockClient{err: errors.New("Error")}); err == nil {
+		t.Error("Test Failed:TestDoRequestErr ")
+	}
+
+	req.httpVerb = "\\\\\\"
+	if _, err := req.doRequest(MockClient{}); err == nil {
+		t.Error("Test Failed:TestDoRequestErr ")
+	}
+}
+
+func TestBuild(t *testing.T) {
+	_, err := RequestBuilder().
+		Get().
+		WithURL(testURL).
+		WithRequestBody(map[string]string{
+			"key": "value",
+		}).
+		WithRequestParams("newKey", "newValue").
+		WithRequestParams("newKey2", "newValue2").
+		Build()
+
+	if err != nil {
+		t.Error(err)
+		t.Error("Test Failed: TestBuild")
+	}
+
+	_, err = RequestBuilder().
+		Get().
+		WithURL(testURL).
+		WithRequestBodyParams("bodyParam", "bodyparam").
+		Build()
+
+	if err != nil {
+		t.Error(err)
+		t.Error("Test Failed: TestBuild")
+	}
+}
+
 func TestBuildErr(t *testing.T) {
 	var testCase []*Request
 
@@ -196,33 +269,3 @@ func TestBuildErr(t *testing.T) {
 		}
 	}
 }
-
-// type mock struct{}
-
-// type MockHTTPClient http.Client
-
-// type MockHTTPClientErr http.Client
-
-// // Do is the mock client's `Do` func
-// func (m *MockHTTPClient) Do(req *http.Request) (*http.Response, error) {
-// 	return &http.Response{}, nil
-// }
-
-// func (m *MockHTTPClientErr) Do(req *http.Request) (*http.Response, error) {
-// 	return nil, errors.New("Error")
-// }
-// func TestDoRequestErr(t *testing.T) {
-// 	req := &Request{
-// 		url:         "http://localhost:8081/",
-// 		httpVerb:    POST,
-// 		requestBody: []byte{`bodySample`},
-// 	}
-
-// 	if resp, err := req.doRequest(&MockHTTPClientErr{}); err == nil {
-// 		t.Error("Test Failed:TestDoRequestErr ")
-// 	}
-
-// 	if resp, err := req.doRequest(&MockHTTPClient{}); err != nil {
-// 		t.Error("Test Failed:TestDoRequestErr ")
-// 	}
-// }
