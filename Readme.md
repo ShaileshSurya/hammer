@@ -17,8 +17,8 @@ Golang's Fluent HTTP Request Client
     client := &requesto.Requesto{}
 	resp, err := client.Get("http://localhost:8081/employee").
 		WithHeaders("Accept", "application/json").
-        	WithHeaders("user-id", "10000").
-        	WithParams("department","HR")
+        WithHeaders("user-id", "10000").
+        WithRequestParams("department","HR")
 		Into(&employee{}).
 		Execute()
 ```
@@ -32,7 +32,7 @@ request, err := requesto.RequestBuilder().
 		WithURL("http://localhost:8081/employee").
 		WithHeaders("Accept", "application/json").
 		WithHeaders("user-id", "10062").
-		WithParams("department", "HR").
+		WithRequestParams("department", "HR").
 		Build()
 
 resp, err:= client.Execute(request)
@@ -49,7 +49,7 @@ request, err := requesto.RequestBuilder().
 		WithURL("http://localhost:8081/employee").
 		WithHeaders("Accept", "application/json").
 		WithHeaders("user-id", "10062").
-		WithParams("department", "HR").
+		WithRequestParams("department", "HR").
 		Build()
 
 employeeList := []Employee{}
@@ -70,13 +70,13 @@ reqTemp, err := requesto.RequestBuilder().
 		WithURL("http://localhost:8081/employee").
 		WithHeaders("Accept", "application/json").
 		WithHeaders("user-id", "10062").
-		WithParams("department", "HR").
+		WithRequestParams("department", "HR").
 		Build()
 
 request, err := requesto.RequestBuilder().
 		WithTemplate(reqTemp).
-        	WithParams("post","manager").
-        	WithParams("centre","pune")
+        WithRequestParams("post","manager").
+        WithRequestParams("centre","pune")
 		Build()
 
 employeeList := []Employee{}

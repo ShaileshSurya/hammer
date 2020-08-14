@@ -1,0 +1,41 @@
+# Binaries, Compiled Object files, Static and Dynamic libs (Shared Objects)
+*.exe
+*.dll
+*.dylib
+*.o
+*.a
+*.so
+
+# Test binary, build with `go test -c`
+*.test
+
+# Output of the go profiler
+*.prof
+
+# Generally ignore these files
+*.log
+*.tar.gz
+*.out
+
+# Folders
+_obj
+_test
+pipeline
+bin/*
+pkg/*
+vendor/*
+!bin/.gitkeep
+!pkg/.gitkeep
+!vendor/.gitkeep
+
+.vendor/bin
+.vendor/pkg
+.tools/bin
+.tools/pkg
+main/*
+
+# Project-local glide cache
+.glide/
+
+# Miscelleneous
+build.sh
