@@ -1,10 +1,12 @@
-[![Build Status](https://travis-ci.org/ShaileshSurya/requesto.svg?branch=master)](https://travis-ci.org/ShaileshSurya/requesto)
 
-# Requesto
+![alt text](https://github.com/ShaileshSurya/go-images/blob/master/go_pic.jpg?raw=true)
+
+# Requesto  [![Build Status](https://travis-ci.org/ShaileshSurya/requesto.svg?branch=master)](https://travis-ci.org/ShaileshSurya/requesto)
+
 
 Golang's Fluent HTTP Request Client 
 
-![alt text](https://github.com/ShaileshSurya/go-images/blob/master/go_pic.jpg?raw=true)
+
 
 ## Recipes
 
@@ -52,8 +54,8 @@ reqTemp, err := requesto.RequestBuilder().
 
 request, err := requesto.RequestBuilder().
 		WithTemplate(reqTemp).
-        WithRequestParams("post","manager").
-        WithRequestParams("centre","pune")
+        	WithRequestParams("post","manager").
+        	WithRequestParams("centre","pune")
 		Build()
 
 employeeList := []Employee{}
