@@ -4,30 +4,11 @@
 
 Golang's Fluent HTTP Request Client 
 
+![alt text](https://github.com/ShaileshSurya/go-images/blob/master/go_pic.jpg?raw=true)
 
 ## Recipes
-```
-    // This pattern 1 
-	client := &requesto.Requesto{}
-	resp, err := client.Get("http://localhost:8081/employee").
-		WithHeaders("Accept", "application/json").
-		WithHeaders("user-id", "10000").
-		Execute()
-
-
-    // Fetch the response into the employee struct. 
-    client := &requesto.Requesto{}
-	resp, err := client.Get("http://localhost:8081/employee").
-		WithHeaders("Accept", "application/json").
-        WithHeaders("user-id", "10000").
-        WithRequestParams("department","HR")
-		Into(&employee{}).
-		Execute()
-```
 
 ```
-// This is a pattern 2 >> Preffered. 
-
 client := &requesto.Requesto{}
 request, err := requesto.RequestBuilder().
 		Get().
@@ -43,8 +24,6 @@ resp, err:= client.Execute(request)
 
 
 ```
-// This is a pattern 2 >> Preffered. 
-
 client := &requesto.Requesto{}
 request, err := requesto.RequestBuilder().
 		Get().
@@ -55,10 +34,6 @@ request, err := requesto.RequestBuilder().
 		Build()
 
 employeeList := []Employee{}
-
-resp, err:= client.FetchInto(&employeeList).Execute(request)
-
-or 
 
 resp, err:= client.ExecuteInto(request,&EmployeeList)
 ```
@@ -83,6 +58,5 @@ request, err := requesto.RequestBuilder().
 
 employeeList := []Employee{}
 
-resp, err:= client.FetchInto(&employeeList).Execute(request)
-
+resp, err:= client.ExecuteInto(request,&EmployeeList)
 ```
