@@ -13,16 +13,7 @@ const (
 	TRACE   = "TRACE"
 )
 
-// ConstantErr
-type constantErr string
-
-// Error Constants
-const (
-	BuildError      = constantErr("Error While Building Request")
-	RespDecodeError = constantErr("Error While Decoding Response to Into Struct")
-)
-
 // Error
 const (
-	RespDecodeErrorx = "Error While Decoding Response to Into Struct"
+	RespDecodeErrorx = "Error while decoding response to into struct"
 )
