@@ -1,7 +1,7 @@
 
 ![alt text](https://github.com/ShaileshSurya/go-images/blob/master/go_pic.jpg?raw=true)
 
-# Requesto  [![Build Status](https://travis-ci.org/ShaileshSurya/requesto.svg?branch=master)](https://travis-ci.org/ShaileshSurya/requesto)
+# Requesto  [![Build Status](https://travis-ci.org/ShaileshSurya/requesto.svg?branch=master)](https://travis-ci.org/ShaileshSurya/requesto) [![Coverage Status](https://coveralls.io/repos/github/ShaileshSurya/requesto/badge.svg?branch=master)](https://coveralls.io/github/ShaileshSurya/requesto?branch=master)
 
 
 Golang's Fluent HTTP Request Client 
