@@ -8,7 +8,7 @@ import (
 )
 
 type Employee struct {
-	Name      string `json:"page"`
+	Name      string `json:"name"`
 	JobTitle  string `json:"job_title"`
 	JobTitle2 string `json:"job_title2"`
 	Nested    Nested

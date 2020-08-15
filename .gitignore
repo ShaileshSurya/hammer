@@ -34,8 +34,5 @@ vendor/*
 .tools/pkg
 main/*
 
-# Project-local glide cache
-.glide/
-
 # Miscelleneous
 build.sh

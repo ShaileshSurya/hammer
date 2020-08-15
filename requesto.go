@@ -57,20 +57,14 @@ func (r *Requesto) Execute(req *Request) (*http.Response, error) {
 func (r *Requesto) ExecuteInto(req *Request, value interface{}) error {
 	resp, err := r.Execute(req)
 	if err != nil {
-		//r.logMessage("Error while executing request")
 		return err
 	}
 
 	defer resp.Body.Close()
-	body, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		//r.logMessage("Error while reading response body")
-		return err
-	}
+	body, _ := ioutil.ReadAll(resp.Body)
 
 	err = json.Unmarshal([]byte(body), value)
 	if err != nil {
-		//r.logMessage("Error while decoding response body into struct")
 		return err
 	}
 	return nil
