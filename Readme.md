@@ -57,7 +57,7 @@ WithHTTPClient(*http.Client)
 
 ### RequestBuilder Api's
 ```
-// WithRequestBody ....
+// WithRequestBody struct or map can be sent
 WithRequestBody(body interface{}) 
 
 // WithHeaders ...
