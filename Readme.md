@@ -109,8 +109,8 @@ reqTemp, err := requesto.RequestBuilder().
 
 request, err := requesto.RequestBuilder().
 		WithTemplate(reqTemp).
-        WithRequestParams("post","manager").
-        WithRequestParams("centre","pune")
+        	WithRequestParams("post","manager").
+        	WithRequestParams("centre","pune")
 		Build()
 
 employeeList := []Employee{}
