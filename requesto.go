@@ -49,7 +49,6 @@ func (r *Requesto) Debug() *Requesto {
 // Execute ...
 func (r *Requesto) Execute(req *Request) (*http.Response, error) {
 	httpClient := r.getHTTPClient()
-	req.Requesto = r
 	return req.doRequest(httpClient)
 }
 

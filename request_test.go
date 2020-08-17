@@ -269,3 +269,23 @@ func TestBuildErr(t *testing.T) {
 		}
 	}
 }
+
+func TestWithTemplate(t *testing.T) {
+	tempReq, err := RequestBuilder().
+		Get().
+		WithURL(testURL).
+		WithRequestBody(map[string]string{
+			"key": "value",
+		}).
+		WithRequestParams("newKey", "newValue").
+		WithRequestParams("newKey2", "newValue2").
+		Build()
+	if err != nil {
+		t.Error("Test Failed: TestWithTemplate")
+	}
+
+	req := RequestBuilder().WithTemplate(tempReq)
+	if !reflect.DeepEqual(req, tempReq) {
+		t.Error("Test Failed: TestWithTemplate")
+	}
+}

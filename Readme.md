@@ -36,18 +36,26 @@ resp.err:= client.ExecuteInto(request, &model)
 
 ### Supported HTTP Verbs
 ```
-GET     
-HEAD    
-POST    
-PUT    
-PATCH  
-DELETE  
-CONNECT 
-OPTIONS 
-TRACE   
+Get()  
+Head()   
+Post() 
+Put()      
+Patch() 
+Delete()
+Connect()
+Options()
+Trace()  
+```
+### Requesto Client Api's
+```
+// New intializes and returns new Requesto Client
+New()
+
+// WithHTTPClient returns Requesto client with custom HTTPClient
+WithHTTPClient(*http.Client)
 ```
 
-### Request Builder Methods
+### RequestBuilder Api's
 ```
 // WithRequestBody ....
 WithRequestBody(body interface{}) 
@@ -66,11 +74,14 @@ WithURL(value string)
 
 // WithBasicAuth ...
 WithBasicAuth(username, password string)
+
+// WithTemplate will create a request with already created request. See example below. 
+WithTemplate(tempRequest *Request) 
 ```
 
 
 ```
-client := &requesto.Requesto{}
+client := requesto.New()
 request, err := requesto.RequestBuilder().
 		Get().
 		WithURL("http://localhost:8081/employee").
@@ -87,7 +98,7 @@ resp, err:= client.ExecuteInto(request,&EmployeeList)
 
 ```
 
-client := &requesto.Requesto{}
+client := requesto.New()
 reqTemp, err := requesto.RequestBuilder().
 		Get().
 		WithURL("http://localhost:8081/employee").
@@ -98,8 +109,8 @@ reqTemp, err := requesto.RequestBuilder().
 
 request, err := requesto.RequestBuilder().
 		WithTemplate(reqTemp).
-        	WithRequestParams("post","manager").
-        	WithRequestParams("centre","pune")
+        WithRequestParams("post","manager").
+        WithRequestParams("centre","pune")
 		Build()
 
 employeeList := []Employee{}

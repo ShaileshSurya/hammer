@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"net/url"
 	"reflect"
 )
 
@@ -17,12 +18,11 @@ type Request struct {
 	url      string
 
 	// Check if the Errors can be used as a array of errors.
-	err               error
-	headers           map[string]string
-	requesto          *Requesto
-	into              interface{}
+	err     error
+	headers map[string]string
+	// TODO: use url.Values{} here.
 	requestParams     map[string]string
-	Requesto          *Requesto
+	formParams        url.Values
 	requestBodyParams map[string]interface{}
 	requestBody       []byte
 	basicAuth
@@ -106,6 +106,11 @@ func (r *Request) WithID(ID string) *Request {
 	}
 }
 
+// WithTemplate ...
+func (r *Request) WithTemplate(tempRequest *Request) *Request {
+	return tempRequest
+}
+
 // Get ...
 func (r *Request) Get() *Request {
 	r.httpVerb = GET
@@ -169,10 +174,10 @@ func (r *Request) Build() (*Request, error) {
 		return nil, errors.New("No HttpVerb Provided")
 	}
 	if "" == r.url {
-		return nil, errors.New("No Url Provided")
+		return nil, errors.New("No URL Provided")
 	}
 
-	// Check if this can be moved to WithHeaders method
+	// Check if this can be moved to WithHeaders method or using url.Values{}
 	if r.requestParams != nil {
 		reqParamString := "?"
 		for k, v := range r.requestParams {
@@ -205,7 +210,7 @@ func (r *Request) doRequest(client httpOperations) (*http.Response, error) {
 
 	request, err := http.NewRequest(r.httpVerb, r.url, reqBody)
 	if err != nil {
-		return nil, errors.New("Log While creating request")
+		return nil, errors.New("Error While Creating Request")
 	}
 	for k, v := range r.headers {
 		request.Header.Set(k, v)
