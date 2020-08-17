@@ -1,4 +1,4 @@
-package requesto
+package hammer
 
 import (
 	"bytes"

@@ -1,4 +1,4 @@
-package requesto
+package hammer
 
 import (
 	"net/http"
@@ -13,7 +13,7 @@ type httpClient struct {
 	client *http.Client
 }
 
-func (r *Requesto) getHTTPClient() httpOperations {
+func (r *Hammer) getHTTPClient() httpOperations {
 
 	if r.HTTPClient == nil || reflect.DeepEqual(r.HTTPClient, httpClient{}) {
 		r.HTTPClient = httpClient{

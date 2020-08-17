@@ -1,4 +1,4 @@
-package requesto
+package hammer
 
 import (
 	"bytes"
@@ -11,14 +11,14 @@ import (
 
 func TestNew(t *testing.T) {
 	req := New()
-	if !reflect.DeepEqual(req, &Requesto{}) {
+	if !reflect.DeepEqual(req, &Hammer{}) {
 		t.Error("Test Failed:TestNew")
 	}
 }
 
 //func Implements(V Type, T *Interface) bool
 func TestGetHTTPClient(t *testing.T) {
-	client := (&Requesto{HTTPClient: httpClient{}}).getHTTPClient()
+	client := (&Hammer{HTTPClient: httpClient{}}).getHTTPClient()
 
 	val, ok := client.(httpClient)
 	if !ok {
@@ -29,7 +29,7 @@ func TestGetHTTPClient(t *testing.T) {
 		t.Error("TestFailed: TestGetHTTPClient")
 	}
 
-	clientx := (&Requesto{}).getHTTPClient()
+	clientx := (&Hammer{}).getHTTPClient()
 	valx, _ := clientx.(httpClient)
 	if !reflect.DeepEqual(valx.client, &http.Client{}) {
 		t.Error("TestFailed: TestGetHTTPClient")
@@ -37,7 +37,7 @@ func TestGetHTTPClient(t *testing.T) {
 }
 
 func TestDebug(t *testing.T) {
-	questo := (&Requesto{}).Debug()
+	questo := (&Hammer{}).Debug()
 
 	if !questo.debugMode {
 		t.Error("Test Failed: TestDebug")
@@ -63,20 +63,20 @@ func TestExecute(t *testing.T) {
 		requestBody: []byte(`bodySample`),
 	}
 
-	requesto := &Requesto{
+	hammer := &Hammer{
 		HTTPClient: MockClient{
 			err: errors.New("Error"),
 		},
 	}
-	_, err := requesto.Execute(req)
+	_, err := hammer.Execute(req)
 	if err == nil {
 		t.Error("Test Failed:TestExecute ")
 	}
 
-	requesto = &Requesto{
+	hammer = &Hammer{
 		HTTPClient: MockClient{},
 	}
-	_, xerr := requesto.Execute(req)
+	_, xerr := hammer.Execute(req)
 	if xerr != nil {
 		t.Error("Test Failed:TestExecute ")
 	}
@@ -91,7 +91,7 @@ func TestExecuteInto(t *testing.T) {
 
 	body := []byte(`{"name":"name","job_title":"jobTitle1","job_title2":"jobTitle2","Nested":{"field":"filed1","field2":0,"field3":0}}`)
 
-	requesto := &Requesto{
+	hammer := &Hammer{
 		HTTPClient: MockClient{
 			//err: errors.New("Error"),
 			response: &http.Response{
@@ -108,7 +108,7 @@ func TestExecuteInto(t *testing.T) {
 		},
 	}
 	var emp Employee
-	err := requesto.ExecuteInto(req, &emp)
+	err := hammer.ExecuteInto(req, &emp)
 	if err != nil {
 		t.Error("Test Failed:TestExecute ")
 	}
@@ -120,13 +120,13 @@ func TestExecuteIntoErrExecute(t *testing.T) {
 		httpVerb:    POST,
 		requestBody: []byte(`bodySample`),
 	}
-	requesto := &Requesto{
+	hammer := &Hammer{
 		HTTPClient: MockClient{
 			err: errors.New("Error"),
 		},
 	}
 	var emp Employee
-	err := requesto.ExecuteInto(req, &emp)
+	err := hammer.ExecuteInto(req, &emp)
 	if err == nil {
 		t.Error("Test Failed:TestExecute ")
 	}
@@ -140,7 +140,7 @@ func TestExecuteIntoErrMarshal(t *testing.T) {
 	}
 	body := []byte(`{"name":"name","job_title":"jobTitle1""job_title2":"jobTitle2","Nested":{"field":"filed1","field2":0,"field3":0`)
 
-	requesto := &Requesto{
+	hammer := &Hammer{
 		HTTPClient: MockClient{
 			//err: errors.New("Error"),
 			response: &http.Response{
@@ -157,7 +157,7 @@ func TestExecuteIntoErrMarshal(t *testing.T) {
 		},
 	}
 	var emp Employee
-	err := requesto.ExecuteInto(req, &emp)
+	err := hammer.ExecuteInto(req, &emp)
 	if err == nil {
 		t.Error("Test Failed:TestExecute ")
 	}

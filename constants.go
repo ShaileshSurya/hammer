@@ -1,4 +1,4 @@
-package requesto
+package hammer
 
 // Constants for HTTP verbs.
 const (

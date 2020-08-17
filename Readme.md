@@ -1,7 +1,7 @@
 
 ![alt text](https://github.com/ShaileshSurya/go-images/blob/master/go_pic.jpg?raw=true)
 
-# Requesto  [![Build Status](https://travis-ci.org/ShaileshSurya/requesto.svg?branch=master)](https://travis-ci.org/ShaileshSurya/requesto) [![Coverage Status](https://coveralls.io/repos/github/ShaileshSurya/requesto/badge.svg?branch=master)](https://coveralls.io/github/ShaileshSurya/requesto?branch=master)
+# Hammer  [![Build Status](https://travis-ci.org/ShaileshSurya/hammer.svg?branch=master)](https://travis-ci.org/ShaileshSurya/hammer) [![Coverage Status](https://coveralls.io/repos/github/ShaileshSurya/hammer/badge.svg?branch=master)](https://coveralls.io/github/ShaileshSurya/hammer?branch=master)
 
 
 Golang's Fluent HTTP Request Client 
@@ -11,8 +11,8 @@ Golang's Fluent HTTP Request Client
 ## Recipes
 
 ```
-client := requesto.New()
-request, err := requesto.RequestBuilder().
+client := hammer.New()
+request, err := hammer.RequestBuilder().
 		<HttpVerb>().
 		WithURL("http://localhost:8081/employee").
 		WithHeaders("Accept", "application/json").
@@ -46,12 +46,12 @@ Connect()
 Options()
 Trace()  
 ```
-### Requesto Client Api's
+### Hammer Client Api's
 ```
-// New intializes and returns new Requesto Client
+// New intializes and returns new Hammer Client
 New()
 
-// WithHTTPClient returns Requesto client with custom HTTPClient
+// WithHTTPClient returns Hammer client with custom HTTPClient
 WithHTTPClient(*http.Client)
 ```
 
@@ -81,8 +81,8 @@ WithTemplate(tempRequest *Request)
 
 
 ```
-client := requesto.New()
-request, err := requesto.RequestBuilder().
+client := hammer.New()
+request, err := hammer.RequestBuilder().
 		Get().
 		WithURL("http://localhost:8081/employee").
 		WithHeaders("Accept", "application/json").
@@ -98,8 +98,8 @@ resp, err:= client.ExecuteInto(request,&EmployeeList)
 
 ```
 
-client := requesto.New()
-reqTemp, err := requesto.RequestBuilder().
+client := hammer.New()
+reqTemp, err := hammer.RequestBuilder().
 		Get().
 		WithURL("http://localhost:8081/employee").
 		WithHeaders("Accept", "application/json").
@@ -107,7 +107,7 @@ reqTemp, err := requesto.RequestBuilder().
 		WithRequestParams("department", "HR").
 		Build()
 
-request, err := requesto.RequestBuilder().
+request, err := hammer.RequestBuilder().
 		WithTemplate(reqTemp).
         	WithRequestParams("post","manager").
         	WithRequestParams("centre","pune")

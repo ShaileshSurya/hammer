@@ -1,4 +1,4 @@
-package requesto
+package hammer
 
 import (
 	"encoding/json"
@@ -6,8 +6,8 @@ import (
 	"net/http"
 )
 
-// Requesto ...
-type Requesto struct {
+// Hammer ...
+type Hammer struct {
 	HTTPClient httpOperations
 	// Finalize on LogFunc it should adhere to the users log level
 	LogFunc   func(msg string)
@@ -15,25 +15,25 @@ type Requesto struct {
 }
 
 // New ...
-func New() *Requesto {
-	req := &Requesto{}
+func New() *Hammer {
+	req := &Hammer{}
 	return req
 }
 
-// func (r *Requesto) logMessage(message string) {
+// func (r *Hammer) logMessage(message string) {
 // 	if r.debugMode {
 // 		r.LogFunc(message)
 // 	}
 // }
 
 // WithHTTPClient ...
-func (r *Requesto) WithHTTPClient(hClient *http.Client) *Requesto {
+func (r *Hammer) WithHTTPClient(hClient *http.Client) *Hammer {
 	r.HTTPClient = httpClient{client: hClient}
 	return r
 }
 
-// func (r *Requesto) clone() *Requesto {
-// 	return &Requesto{
+// func (r *Hammer) clone() *Hammer {
+// 	return &Hammer{
 // 		HTTPClient: r.HTTPClient,
 // 		LogFunc:    r.LogFunc,
 // 		debugMode:  r.debugMode,
@@ -41,19 +41,19 @@ func (r *Requesto) WithHTTPClient(hClient *http.Client) *Requesto {
 // }
 
 // Debug ...
-func (r *Requesto) Debug() *Requesto {
+func (r *Hammer) Debug() *Hammer {
 	r.debugMode = true
 	return r
 }
 
 // Execute ...
-func (r *Requesto) Execute(req *Request) (*http.Response, error) {
+func (r *Hammer) Execute(req *Request) (*http.Response, error) {
 	httpClient := r.getHTTPClient()
 	return req.doRequest(httpClient)
 }
 
 // ExecuteInto ...
-func (r *Requesto) ExecuteInto(req *Request, value interface{}) error {
+func (r *Hammer) ExecuteInto(req *Request, value interface{}) error {
 	resp, err := r.Execute(req)
 	if err != nil {
 		return err

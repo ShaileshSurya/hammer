@@ -1,4 +1,4 @@
-package requesto
+package hammer
 
 import (
 	"bytes"
@@ -223,7 +223,7 @@ func (r *Request) doRequest(client httpOperations) (*http.Response, error) {
 	}
 
 	// command, _ := GetCurlCommand(request)
-	// r.Requesto.logMessage(command.String())
+	// r.Hammer.logMessage(command.String())
 
 	resp, doerr := client.Do(request)
 	if doerr != nil {
@@ -239,7 +239,7 @@ func (r *Request) doRequest(client httpOperations) (*http.Response, error) {
 // 		return nil, err
 // 	}
 
-// 	httpClient := r.requesto.getHTTPClient()
+// 	httpClient := r.hammer.getHTTPClient()
 
 // 	switch r.httpVerb {
 // 	case GET:
