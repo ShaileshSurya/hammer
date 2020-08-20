@@ -1,7 +1,7 @@
 
 ![alt text](https://github.com/ShaileshSurya/go-images/blob/master/go_pic.jpg?raw=true)
 
-# Hammer  [![Build Status](https://travis-ci.org/ShaileshSurya/hammer.svg?branch=master)](https://travis-ci.org/ShaileshSurya/hammer) [![Coverage Status](https://coveralls.io/repos/github/ShaileshSurya/hammer/badge.svg?branch=master)](https://coveralls.io/github/ShaileshSurya/hammer?branch=master)
+# Hammer [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![Build Status](https://travis-ci.org/ShaileshSurya/hammer.svg?branch=master)](https://travis-ci.org/ShaileshSurya/hammer) [![Coverage Status](https://coveralls.io/repos/github/ShaileshSurya/hammer/badge.svg?branch=master)](https://coveralls.io/github/ShaileshSurya/hammer?branch=master)
 
 
 Golang's Fluent HTTP Request Client 
