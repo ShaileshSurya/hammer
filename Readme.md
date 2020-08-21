@@ -25,12 +25,12 @@ resp, err:= client.Execute(request)
 or 
 
 map := make(map[string]interface{})
-resp.err:= client.ExecuteInto(request, &map)
+resp,err:= client.ExecuteInto(request, &map)
 
 or 
 
 model := Employee{}
-resp.err:= client.ExecuteInto(request, &model)
+resp,err:= client.ExecuteInto(request, &model)
 
 ```
 
@@ -53,6 +53,12 @@ New()
 
 // WithHTTPClient returns Hammer client with custom HTTPClient
 WithHTTPClient(*http.Client)
+
+// Execute the Request
+Execute(*Request)
+
+// Execute the Request and unmarshal into map or struct provided with unmarshalInto. Please See recipes. 
+ExecuteInto(*Request,unmarshalInto interface{})
 ```
 
 ### RequestBuilder Api's
