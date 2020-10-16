@@ -47,6 +47,12 @@ func (r *Hammer) Debug() *Hammer {
 }
 
 // Execute ...
+func (r *Hammer) ExecuteWithContext(req *Request) (*http.Response, error) {
+	httpClient := r.getHTTPClient()
+	return req.doRequestWithContext(httpClient)
+}
+
+// Execute ...
 func (r *Hammer) Execute(req *Request) (*http.Response, error) {
 	httpClient := r.getHTTPClient()
 	return req.doRequest(httpClient)
@@ -58,7 +64,6 @@ func (r *Hammer) ExecuteInto(req *Request, value interface{}) error {
 	if err != nil {
 		return err
 	}
-
 	defer resp.Body.Close()
 	body, _ := ioutil.ReadAll(resp.Body)
 

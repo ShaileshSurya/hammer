@@ -2,6 +2,7 @@ package hammer
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -25,6 +26,7 @@ type Request struct {
 	formParams        url.Values
 	requestBodyParams map[string]interface{}
 	requestBody       []byte
+	ctx               context.Context
 	basicAuth
 }
 
@@ -38,6 +40,7 @@ func initRequest() *Request {
 		headers:           make(map[string]string),
 		requestParams:     make(map[string]string),
 		requestBodyParams: make(map[string]interface{}),
+		ctx:               context.Background(),
 	}
 }
 
@@ -81,6 +84,12 @@ func (r *Request) WithRequestBodyParams(key string, value interface{}) *Request 
 // WithURL ...
 func (r *Request) WithURL(value string) *Request {
 	r.url = value
+	return r
+}
+
+// WithContext ...
+func (r *Request) WithContext(ctx context.Context) *Request {
+	r.ctx = ctx
 	return r
 }
 
@@ -195,6 +204,51 @@ func (r *Request) Build() (*Request, error) {
 	}
 
 	return r, nil
+}
+
+// TODO : UT for this.
+// TODO : Break this function.
+func (r *Request) doRequestWithContext(client httpOperations) (*http.Response, error) {
+
+	reqBody := func(body []byte) *bytes.Buffer {
+		if len(body) != 0 {
+			return bytes.NewBuffer(body)
+		}
+		return &bytes.Buffer{}
+	}(r.requestBody)
+
+	request, err := http.NewRequest(r.httpVerb, r.url, reqBody)
+	if err != nil {
+		return nil, errors.New("Error While Creating Request")
+	}
+	for k, v := range r.headers {
+		request.Header.Set(k, v)
+	}
+
+	//Add Basic auth
+	if !reflect.DeepEqual(r.basicAuth, basicAuth{}) {
+		request.SetBasicAuth(r.basicAuth.username, r.basicAuth.password)
+		r.basicAuth = basicAuth{}
+	}
+
+	// command, _ := GetCurlCommand(request)
+	// r.Hammer.logMessage(command.String())
+
+	request = request.WithContext(r.ctx)
+	var response *http.Response
+
+	doerr := client.httpDo(r.ctx, request, func(resp *http.Response, err error) error {
+		if err != nil {
+			return err
+		}
+		response = resp
+		return nil
+	})
+	if doerr != nil {
+		return response, doerr
+	}
+
+	return response, err
 }
 
 // TODO : UT for this.

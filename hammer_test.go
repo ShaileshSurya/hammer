@@ -2,6 +2,7 @@ package hammer
 
 import (
 	"bytes"
+	"context"
 	"errors"
 	"io"
 	"net/http"
@@ -56,7 +57,41 @@ func (m MockClient) Do(req *http.Request) (*http.Response, error) {
 	return m.response, nil
 }
 
+func (m MockClient) httpDo(ctx context.Context, req *http.Request, f func(*http.Response, error) error) error {
+
+	if m.err != nil {
+		return m.err
+	}
+	return nil
+}
+func TestExecuteWithContext(t *testing.T) {
+	req := &Request{
+		url:         "http://localhost:8081/",
+		httpVerb:    POST,
+		requestBody: []byte(`bodySample`),
+		ctx:         context.Background(),
+	}
+
+	hammer := &Hammer{
+		HTTPClient: MockClient{
+			err: errors.New("Error"),
+		},
+	}
+	_, err := hammer.ExecuteWithContext(req)
+	if err == nil {
+		t.Error("Test Failed:TestExecuteWithContext ")
+	}
+
+	hammer = &Hammer{
+		HTTPClient: MockClient{},
+	}
+	_, xerr := hammer.ExecuteWithContext(req)
+	if xerr != nil {
+		t.Error("Test Failed:ExecuteWithContext ")
+	}
+}
 func TestExecute(t *testing.T) {
+
 	req := &Request{
 		url:         "http://localhost:8081/",
 		httpVerb:    POST,
