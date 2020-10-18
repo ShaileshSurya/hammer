@@ -2,11 +2,14 @@ package hammer
 
 import (
 	"bytes"
+	"context"
+	"crypto/tls"
 	"errors"
 	"io"
 	"net/http"
 	"reflect"
 	"testing"
+	"time"
 )
 
 func TestNew(t *testing.T) {
@@ -16,7 +19,6 @@ func TestNew(t *testing.T) {
 	}
 }
 
-//func Implements(V Type, T *Interface) bool
 func TestGetHTTPClient(t *testing.T) {
 	client := (&Hammer{HTTPClient: httpClient{}}).getHTTPClient()
 
@@ -56,11 +58,35 @@ func (m MockClient) Do(req *http.Request) (*http.Response, error) {
 	return m.response, nil
 }
 
+func TestExecuteWithCancelContext(t *testing.T) {
+
+	tr := &http.Transport{
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+	}
+	hammerClient := New().WithHTTPClient(&http.Client{Transport: tr})
+
+	cancelContext, cancel := context.WithTimeout(context.Background(), 1*time.Millisecond)
+	defer cancel() // cancel when we are finished consuming integers
+	req := &Request{
+		url:         "http://www.google.com/",
+		httpVerb:    GET,
+		requestBody: []byte(`bodySample`),
+		ctx:         cancelContext,
+	}
+
+	_, err := hammerClient.Execute(req)
+	if err == nil {
+		t.Error("Test Failed:TestExecuteWithContext")
+	}
+
+}
+
 func TestExecute(t *testing.T) {
 	req := &Request{
 		url:         "http://localhost:8081/",
 		httpVerb:    POST,
 		requestBody: []byte(`bodySample`),
+		ctx:         context.Background(),
 	}
 
 	hammer := &Hammer{
@@ -87,6 +113,7 @@ func TestExecuteInto(t *testing.T) {
 		url:         "http://localhost:8081/",
 		httpVerb:    POST,
 		requestBody: []byte(`bodySample`),
+		ctx:         context.Background(),
 	}
 
 	body := []byte(`{"name":"name","job_title":"jobTitle1","job_title2":"jobTitle2","Nested":{"field":"filed1","field2":0,"field3":0}}`)
@@ -119,6 +146,7 @@ func TestExecuteIntoErrExecute(t *testing.T) {
 		url:         "http://localhost:8081/",
 		httpVerb:    POST,
 		requestBody: []byte(`bodySample`),
+		ctx:         context.Background(),
 	}
 	hammer := &Hammer{
 		HTTPClient: MockClient{
@@ -137,6 +165,7 @@ func TestExecuteIntoErrMarshal(t *testing.T) {
 		url:         "http://localhost:8081/",
 		httpVerb:    POST,
 		requestBody: []byte(`bodySample`),
+		ctx:         context.Background(),
 	}
 	body := []byte(`{"name":"name","job_title":"jobTitle1""job_title2":"jobTitle2","Nested":{"field":"filed1","field2":0,"field3":0`)
 

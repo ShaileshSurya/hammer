@@ -2,6 +2,7 @@ package hammer
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -25,6 +26,7 @@ type Request struct {
 	formParams        url.Values
 	requestBodyParams map[string]interface{}
 	requestBody       []byte
+	ctx               context.Context
 	basicAuth
 }
 
@@ -38,6 +40,7 @@ func initRequest() *Request {
 		headers:           make(map[string]string),
 		requestParams:     make(map[string]string),
 		requestBodyParams: make(map[string]interface{}),
+		ctx:               context.Background(),
 	}
 }
 
@@ -81,6 +84,12 @@ func (r *Request) WithRequestBodyParams(key string, value interface{}) *Request 
 // WithURL ...
 func (r *Request) WithURL(value string) *Request {
 	r.url = value
+	return r
+}
+
+// WithContext ...
+func (r *Request) WithContext(ctx context.Context) *Request {
+	r.ctx = ctx
 	return r
 }
 
@@ -225,50 +234,19 @@ func (r *Request) doRequest(client httpOperations) (*http.Response, error) {
 	// command, _ := GetCurlCommand(request)
 	// r.Hammer.logMessage(command.String())
 
-	resp, doerr := client.Do(request)
+	request = request.WithContext(r.ctx)
+	var response *http.Response
+
+	doerr := httpDo(r.ctx, client, request, func(resp *http.Response, err error) error {
+		if err != nil {
+			return err
+		}
+		response = resp
+		return nil
+	})
 	if doerr != nil {
-		return resp, doerr
+		return response, doerr
 	}
-	return resp, err
+
+	return response, err
 }
-
-// Execute ...
-// func (r *Request) Execute() (interface{}, error) {
-
-// 	if err := r.checkError(); err != nil {
-// 		return nil, err
-// 	}
-
-// 	httpClient := r.hammer.getHTTPClient()
-
-// 	switch r.httpVerb {
-// 	case GET:
-// 		resp, err := httpClient.Get(r.baseURL + r.endpoint)
-// 		if err != nil {
-// 			return resp, err
-// 		}
-// 		if r.into != nil {
-// 			body, err := ioutil.ReadAll(resp.Body)
-// 			if err != nil {
-// 				return nil, err
-// 			}
-// 			err = json.Unmarshal([]byte(body), r.into)
-// 			if err != nil {
-// 				return nil, errors.New(RespDecodeErrorx)
-// 			}
-// 			return r.into, nil
-// 		}
-
-// 	case PUT:
-
-// 	case POST:
-
-// 	case DELETE:
-
-// 	case PATCH:
-
-// 	default:
-
-// 	}
-// 	return nil, nil
-// }

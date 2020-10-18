@@ -1,6 +1,7 @@
 package hammer
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
 	"reflect"
@@ -87,6 +88,14 @@ func TestWithRequestBodyParams(t *testing.T) {
 		}
 	} else {
 		t.Error("TestFailed:TestWithRequestBodyParams")
+	}
+}
+func TestWithContext(t *testing.T) {
+	ctxTest := context.Background()
+	req := RequestBuilder().WithContext(ctxTest)
+
+	if !reflect.DeepEqual(req.ctx, context.Background()) {
+		t.Error("Test Failed: TestWithContext")
 	}
 }
 
@@ -203,6 +212,7 @@ func TestDoRequestErr(t *testing.T) {
 			username: "user",
 			password: "pass",
 		},
+		ctx: context.Background(),
 	}
 
 	if _, err := req.doRequest(MockClient{}); err != nil {

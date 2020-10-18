@@ -15,6 +15,7 @@ client := hammer.New()
 request, err := hammer.RequestBuilder().
 		<HttpVerb>().
 		WithURL("http://localhost:8081/employee").
+		WithContext(context.Background()).
 		WithHeaders("Accept", "application/json").
 		WithHeaders("user-id", "10062").
 		WithRequestParams("department", "HR").
@@ -65,6 +66,9 @@ ExecuteInto(*Request,unmarshalInto interface{})
 ```
 // WithRequestBody struct or map can be sent
 WithRequestBody(body interface{}) 
+
+// WithContext ...
+WithContext(ctx context.Context)
 
 // WithHeaders ...
 WithHeaders(key string, value string)
