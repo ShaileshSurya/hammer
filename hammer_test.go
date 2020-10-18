@@ -80,32 +80,7 @@ func TestExecuteWithCancelContext(t *testing.T) {
 	}
 
 }
-func TestExecuteWithContext(t *testing.T) {
-	req := &Request{
-		url:         "http://localhost:8081/",
-		httpVerb:    POST,
-		requestBody: []byte(`bodySample`),
-		ctx:         context.Background(),
-	}
 
-	hammer := &Hammer{
-		HTTPClient: MockClient{
-			err: errors.New("Error"),
-		},
-	}
-	_, err := hammer.Execute(req)
-	if err == nil {
-		t.Error("Test Failed:TestExecuteWithContext ")
-	}
-
-	hammer = &Hammer{
-		HTTPClient: MockClient{},
-	}
-	_, xerr := hammer.Execute(req)
-	if xerr != nil {
-		t.Error("Test Failed:ExecuteWithContext ")
-	}
-}
 func TestExecute(t *testing.T) {
 	req := &Request{
 		url:         "http://localhost:8081/",
