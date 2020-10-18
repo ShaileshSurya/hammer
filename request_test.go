@@ -1,6 +1,7 @@
 package hammer
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
 	"reflect"
@@ -203,22 +204,23 @@ func TestDoRequestErr(t *testing.T) {
 			username: "user",
 			password: "pass",
 		},
+		ctx: context.Background(),
 	}
 
-	if _, err := req.doRequest(MockClient{}); err != nil {
+	if _, err := req.doRequestWithContext(MockClient{}); err != nil {
 		t.Error("Test Failed:TestDoRequestErr ")
 	}
 	req.requestBody = []byte(``)
-	if _, err := req.doRequest(MockClient{}); err != nil {
+	if _, err := req.doRequestWithContext(MockClient{}); err != nil {
 		t.Error("Test Failed:TestDoRequestErr ")
 	}
 
-	if _, err := req.doRequest(MockClient{err: errors.New("Error")}); err == nil {
+	if _, err := req.doRequestWithContext(MockClient{err: errors.New("Error")}); err == nil {
 		t.Error("Test Failed:TestDoRequestErr ")
 	}
 
 	req.httpVerb = "\\\\\\"
-	if _, err := req.doRequest(MockClient{}); err == nil {
+	if _, err := req.doRequestWithContext(MockClient{}); err == nil {
 		t.Error("Test Failed:TestDoRequestErr ")
 	}
 }

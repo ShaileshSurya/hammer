@@ -237,7 +237,7 @@ func (r *Request) doRequestWithContext(client httpOperations) (*http.Response, e
 	request = request.WithContext(r.ctx)
 	var response *http.Response
 
-	doerr := client.httpDo(r.ctx, request, func(resp *http.Response, err error) error {
+	doerr := httpDo(r.ctx, client, request, func(resp *http.Response, err error) error {
 		if err != nil {
 			return err
 		}
@@ -253,39 +253,39 @@ func (r *Request) doRequestWithContext(client httpOperations) (*http.Response, e
 
 // TODO : UT for this.
 // TODO : Break this function.
-func (r *Request) doRequest(client httpOperations) (*http.Response, error) {
-
-	reqBody := func(body []byte) *bytes.Buffer {
-		if len(body) != 0 {
-			return bytes.NewBuffer(body)
-		}
-		return &bytes.Buffer{}
-	}(r.requestBody)
-
-	request, err := http.NewRequest(r.httpVerb, r.url, reqBody)
-	if err != nil {
-		return nil, errors.New("Error While Creating Request")
-	}
-	for k, v := range r.headers {
-		request.Header.Set(k, v)
-	}
-
-	//Add Basic auth
-	if !reflect.DeepEqual(r.basicAuth, basicAuth{}) {
-		request.SetBasicAuth(r.basicAuth.username, r.basicAuth.password)
-		r.basicAuth = basicAuth{}
-	}
-
-	// command, _ := GetCurlCommand(request)
-	// r.Hammer.logMessage(command.String())
-
-	resp, doerr := client.Do(request)
-	if doerr != nil {
-		return resp, doerr
-	}
-	return resp, err
-}
-
+//func (r *Request) doRequest(client httpOperations) (*http.Response, error) {
+//
+//	reqBody := func(body []byte) *bytes.Buffer {
+//		if len(body) != 0 {
+//			return bytes.NewBuffer(body)
+//		}
+//		return &bytes.Buffer{}
+//	}(r.requestBody)
+//
+//	request, err := http.NewRequest(r.httpVerb, r.url, reqBody)
+//	if err != nil {
+//		return nil, errors.New("Error While Creating Request")
+//	}
+//	for k, v := range r.headers {
+//		request.Header.Set(k, v)
+//	}
+//
+//	//Add Basic auth
+//	if !reflect.DeepEqual(r.basicAuth, basicAuth{}) {
+//		request.SetBasicAuth(r.basicAuth.username, r.basicAuth.password)
+//		r.basicAuth = basicAuth{}
+//	}
+//
+//	// command, _ := GetCurlCommand(request)
+//	// r.Hammer.logMessage(command.String())
+//
+//	resp, doerr := client.Do(request)
+//	if doerr != nil {
+//		return resp, doerr
+//	}
+//	return resp, err
+//}
+//
 // Execute ...
 // func (r *Request) Execute() (interface{}, error) {
 

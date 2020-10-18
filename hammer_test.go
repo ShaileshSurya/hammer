@@ -57,11 +57,12 @@ func (m MockClient) Do(req *http.Request) (*http.Response, error) {
 	return m.response, nil
 }
 
-func (m MockClient) httpDo(ctx context.Context, req *http.Request, f func(*http.Response, error) error) error {
+func (m MockClient) httpDo(ctx context.Context, req *http.Request, f func(response *http.Response, err error) error) error {
 
 	if m.err != nil {
 		return m.err
 	}
+
 	return nil
 }
 func TestExecuteWithContext(t *testing.T) {
@@ -77,7 +78,7 @@ func TestExecuteWithContext(t *testing.T) {
 			err: errors.New("Error"),
 		},
 	}
-	_, err := hammer.ExecuteWithContext(req)
+	_, err := hammer.Execute(req)
 	if err == nil {
 		t.Error("Test Failed:TestExecuteWithContext ")
 	}
@@ -85,7 +86,7 @@ func TestExecuteWithContext(t *testing.T) {
 	hammer = &Hammer{
 		HTTPClient: MockClient{},
 	}
-	_, xerr := hammer.ExecuteWithContext(req)
+	_, xerr := hammer.Execute(req)
 	if xerr != nil {
 		t.Error("Test Failed:ExecuteWithContext ")
 	}
@@ -96,6 +97,7 @@ func TestExecute(t *testing.T) {
 		url:         "http://localhost:8081/",
 		httpVerb:    POST,
 		requestBody: []byte(`bodySample`),
+		ctx:         context.Background(),
 	}
 
 	hammer := &Hammer{
@@ -122,6 +124,7 @@ func TestExecuteInto(t *testing.T) {
 		url:         "http://localhost:8081/",
 		httpVerb:    POST,
 		requestBody: []byte(`bodySample`),
+		ctx:         context.Background(),
 	}
 
 	body := []byte(`{"name":"name","job_title":"jobTitle1","job_title2":"jobTitle2","Nested":{"field":"filed1","field2":0,"field3":0}}`)
@@ -154,6 +157,7 @@ func TestExecuteIntoErrExecute(t *testing.T) {
 		url:         "http://localhost:8081/",
 		httpVerb:    POST,
 		requestBody: []byte(`bodySample`),
+		ctx:         context.Background(),
 	}
 	hammer := &Hammer{
 		HTTPClient: MockClient{
@@ -172,6 +176,7 @@ func TestExecuteIntoErrMarshal(t *testing.T) {
 		url:         "http://localhost:8081/",
 		httpVerb:    POST,
 		requestBody: []byte(`bodySample`),
+		ctx:         context.Background(),
 	}
 	body := []byte(`{"name":"name","job_title":"jobTitle1""job_title2":"jobTitle2","Nested":{"field":"filed1","field2":0,"field3":0`)
 

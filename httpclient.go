@@ -8,7 +8,7 @@ import (
 
 type httpOperations interface {
 	Do(*http.Request) (*http.Response, error)
-	httpDo(ctx context.Context, req *http.Request, f func(*http.Response, error) error) error
+	//httpDo(ctx context.Context, req *http.Request, f func(*http.Response, error) error) error
 }
 
 type httpClient struct {
@@ -25,13 +25,13 @@ func (r *Hammer) getHTTPClient() httpOperations {
 	return r.HTTPClient
 }
 
-func (h httpClient) httpDo(ctx context.Context, req *http.Request, f func(*http.Response, error) error) error {
+func httpDo(ctx context.Context, client httpOperations, req *http.Request, f func(*http.Response, error) error) error {
 	// Run the HTTP request in a goroutine and pass the response to f.
 	c := make(chan error, 1)
 	req = req.WithContext(ctx)
 
 	go func() {
-		c <- f(h.client.Do(req))
+		c <- f(client.Do(req))
 	}()
 
 	select {
@@ -43,6 +43,24 @@ func (h httpClient) httpDo(ctx context.Context, req *http.Request, f func(*http.
 	}
 }
 
+//func (h httpClient) httpDo(ctx context.Context, req *http.Request, f func(*http.Response, error) error) error {
+//	// Run the HTTP request in a goroutine and pass the response to f.
+//	c := make(chan error, 1)
+//	req = req.WithContext(ctx)
+//
+//	go func() {
+//		c <- f(h.client.Do(req))
+//	}()
+//
+//	select {
+//	case <-ctx.Done():
+//		<-c // Wait for f to return.
+//		return ctx.Err()
+//	case err := <-c:
+//		return err
+//	}
+//}
+//
 func (h httpClient) Do(req *http.Request) (*http.Response, error) {
 	return h.client.Do(req)
 }
