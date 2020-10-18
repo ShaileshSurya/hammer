@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
+	"reflect"
 )
 
 // Hammer ...
@@ -20,16 +21,20 @@ func New() *Hammer {
 	return req
 }
 
-// func (r *Hammer) logMessage(message string) {
-// 	if r.debugMode {
-// 		r.LogFunc(message)
-// 	}
-// }
-
 // WithHTTPClient ...
 func (r *Hammer) WithHTTPClient(hClient *http.Client) *Hammer {
 	r.HTTPClient = httpClient{client: hClient}
 	return r
+}
+
+func (r *Hammer) getHTTPClient() httpOperations {
+
+	if r.HTTPClient == nil || reflect.DeepEqual(r.HTTPClient, httpClient{}) {
+		r.HTTPClient = httpClient{
+			client: &http.Client{},
+		}
+	}
+	return r.HTTPClient
 }
 
 // func (r *Hammer) clone() *Hammer {

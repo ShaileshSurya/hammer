@@ -17,7 +17,6 @@ func TestNew(t *testing.T) {
 	}
 }
 
-//func Implements(V Type, T *Interface) bool
 func TestGetHTTPClient(t *testing.T) {
 	client := (&Hammer{HTTPClient: httpClient{}}).getHTTPClient()
 
@@ -57,14 +56,6 @@ func (m MockClient) Do(req *http.Request) (*http.Response, error) {
 	return m.response, nil
 }
 
-func (m MockClient) httpDo(ctx context.Context, req *http.Request, f func(response *http.Response, err error) error) error {
-
-	if m.err != nil {
-		return m.err
-	}
-
-	return nil
-}
 func TestExecuteWithContext(t *testing.T) {
 	req := &Request{
 		url:         "http://localhost:8081/",
@@ -92,7 +83,6 @@ func TestExecuteWithContext(t *testing.T) {
 	}
 }
 func TestExecute(t *testing.T) {
-
 	req := &Request{
 		url:         "http://localhost:8081/",
 		httpVerb:    POST,
