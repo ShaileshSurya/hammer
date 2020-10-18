@@ -208,7 +208,7 @@ func (r *Request) Build() (*Request, error) {
 
 // TODO : UT for this.
 // TODO : Break this function.
-func (r *Request) doRequestWithContext(client httpOperations) (*http.Response, error) {
+func (r *Request) doRequest(client httpOperations) (*http.Response, error) {
 
 	reqBody := func(body []byte) *bytes.Buffer {
 		if len(body) != 0 {
@@ -250,79 +250,3 @@ func (r *Request) doRequestWithContext(client httpOperations) (*http.Response, e
 
 	return response, err
 }
-
-// TODO : UT for this.
-// TODO : Break this function.
-//func (r *Request) doRequest(client httpOperations) (*http.Response, error) {
-//
-//	reqBody := func(body []byte) *bytes.Buffer {
-//		if len(body) != 0 {
-//			return bytes.NewBuffer(body)
-//		}
-//		return &bytes.Buffer{}
-//	}(r.requestBody)
-//
-//	request, err := http.NewRequest(r.httpVerb, r.url, reqBody)
-//	if err != nil {
-//		return nil, errors.New("Error While Creating Request")
-//	}
-//	for k, v := range r.headers {
-//		request.Header.Set(k, v)
-//	}
-//
-//	//Add Basic auth
-//	if !reflect.DeepEqual(r.basicAuth, basicAuth{}) {
-//		request.SetBasicAuth(r.basicAuth.username, r.basicAuth.password)
-//		r.basicAuth = basicAuth{}
-//	}
-//
-//	// command, _ := GetCurlCommand(request)
-//	// r.Hammer.logMessage(command.String())
-//
-//	resp, doerr := client.Do(request)
-//	if doerr != nil {
-//		return resp, doerr
-//	}
-//	return resp, err
-//}
-//
-// Execute ...
-// func (r *Request) Execute() (interface{}, error) {
-
-// 	if err := r.checkError(); err != nil {
-// 		return nil, err
-// 	}
-
-// 	httpClient := r.hammer.getHTTPClient()
-
-// 	switch r.httpVerb {
-// 	case GET:
-// 		resp, err := httpClient.Get(r.baseURL + r.endpoint)
-// 		if err != nil {
-// 			return resp, err
-// 		}
-// 		if r.into != nil {
-// 			body, err := ioutil.ReadAll(resp.Body)
-// 			if err != nil {
-// 				return nil, err
-// 			}
-// 			err = json.Unmarshal([]byte(body), r.into)
-// 			if err != nil {
-// 				return nil, errors.New(RespDecodeErrorx)
-// 			}
-// 			return r.into, nil
-// 		}
-
-// 	case PUT:
-
-// 	case POST:
-
-// 	case DELETE:
-
-// 	case PATCH:
-
-// 	default:
-
-// 	}
-// 	return nil, nil
-// }

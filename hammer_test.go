@@ -3,11 +3,13 @@ package hammer
 import (
 	"bytes"
 	"context"
+	"crypto/tls"
 	"errors"
 	"io"
 	"net/http"
 	"reflect"
 	"testing"
+	"time"
 )
 
 func TestNew(t *testing.T) {
@@ -56,6 +58,28 @@ func (m MockClient) Do(req *http.Request) (*http.Response, error) {
 	return m.response, nil
 }
 
+func TestExecuteWithCancelContext(t *testing.T) {
+
+	tr := &http.Transport{
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+	}
+	hammerClient := New().WithHTTPClient(&http.Client{Transport: tr})
+
+	cancelContext, cancel := context.WithTimeout(context.Background(), 1*time.Millisecond)
+	defer cancel() // cancel when we are finished consuming integers
+	req := &Request{
+		url:         "http://www.google.com/",
+		httpVerb:    GET,
+		requestBody: []byte(`bodySample`),
+		ctx:         cancelContext,
+	}
+
+	_, err := hammerClient.Execute(req)
+	if err == nil {
+		t.Error("Test Failed:TestExecuteWithContext")
+	}
+
+}
 func TestExecuteWithContext(t *testing.T) {
 	req := &Request{
 		url:         "http://localhost:8081/",

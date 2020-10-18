@@ -90,6 +90,14 @@ func TestWithRequestBodyParams(t *testing.T) {
 		t.Error("TestFailed:TestWithRequestBodyParams")
 	}
 }
+func TestWithContext(t *testing.T) {
+	ctxTest := context.Background()
+	req := RequestBuilder().WithContext(ctxTest)
+
+	if !reflect.DeepEqual(req.ctx, context.Background()) {
+		t.Error("Test Failed: TestWithContext")
+	}
+}
 
 func TestWithURL(t *testing.T) {
 	url := "http://localhost:8081/"
@@ -207,20 +215,20 @@ func TestDoRequestErr(t *testing.T) {
 		ctx: context.Background(),
 	}
 
-	if _, err := req.doRequestWithContext(MockClient{}); err != nil {
+	if _, err := req.doRequest(MockClient{}); err != nil {
 		t.Error("Test Failed:TestDoRequestErr ")
 	}
 	req.requestBody = []byte(``)
-	if _, err := req.doRequestWithContext(MockClient{}); err != nil {
+	if _, err := req.doRequest(MockClient{}); err != nil {
 		t.Error("Test Failed:TestDoRequestErr ")
 	}
 
-	if _, err := req.doRequestWithContext(MockClient{err: errors.New("Error")}); err == nil {
+	if _, err := req.doRequest(MockClient{err: errors.New("Error")}); err == nil {
 		t.Error("Test Failed:TestDoRequestErr ")
 	}
 
 	req.httpVerb = "\\\\\\"
-	if _, err := req.doRequestWithContext(MockClient{}); err == nil {
+	if _, err := req.doRequest(MockClient{}); err == nil {
 		t.Error("Test Failed:TestDoRequestErr ")
 	}
 }

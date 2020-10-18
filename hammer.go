@@ -52,15 +52,9 @@ func (r *Hammer) Debug() *Hammer {
 }
 
 // Execute ...
-//func (r *Hammer) ExecuteWithContext(req *Request) (*http.Response, error) {
-//	httpClient := r.getHTTPClient()
-//	return req.doRequestWithContext(httpClient)
-//}
-
-// Execute ...
 func (r *Hammer) Execute(req *Request) (*http.Response, error) {
 	httpClient := r.getHTTPClient()
-	return req.doRequestWithContext(httpClient)
+	return req.doRequest(httpClient)
 }
 
 // ExecuteInto ...
