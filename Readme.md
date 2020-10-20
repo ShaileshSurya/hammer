@@ -26,7 +26,7 @@ err:= client.ExecuteInto(request, &m)
 
 // or
 
-model := Employee{}
+responseModel := Employee{}
 err:= client.ExecuteInto(request, &model)
 
 ```
@@ -95,36 +95,36 @@ WithTemplate(tempRequest *Request)
 ```go
 client := hammer.New()
 request, err := hammer.RequestBuilder().
-Get().
-WithURL("http://localhost:8081/employee").
-WithHeaders("Accept", "application/json").
-WithHeaders("user-id", "10062").
-WithRequestParams("department", "HR").
-Build()
+    Get().
+    WithURL("http://localhost:8081/employee").
+    WithHeaders("Accept", "application/json").
+    WithHeaders("user-id", "10062").
+    WithRequestParams("department", "HR").
+    Build()
 
 employeeList := []Employee{}
 
-resp, err:= client.ExecuteInto(request,&EmployeeList)
+err := client.ExecuteInto(request,&EmployeeList)
 ```
 
 ```go
 client := hammer.New()
 reqTemp, err := hammer.RequestBuilder().
-Get().
-WithURL("http://localhost:8081/employee").
-WithHeaders("Accept", "application/json").
-WithHeaders("user-id", "10062").
-WithRequestParams("department", "HR").
-Build()
+    Get().
+    WithURL("http://localhost:8081/employee").
+    WithHeaders("Accept", "application/json").
+    WithHeaders("user-id", "10062").
+    WithRequestParams("department", "HR").
+    Build()
 
 request, err := hammer.RequestBuilder().
-WithTemplate(reqTemp).
-WithRequestParams("post","manager").
-WithRequestParams("centre","pune")
-Build()
+    WithTemplate(reqTemp).
+    WithRequestParams("post","manager").
+    WithRequestParams("centre","pune")
+    Build()
 
 employeeList := []Employee{}
 
-resp, err:= client.ExecuteInto(request,&EmployeeList)
+err:= client.ExecuteInto(request,&EmployeeList)
 
 ```
