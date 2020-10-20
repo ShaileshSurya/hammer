@@ -53,13 +53,13 @@ Trace()
 New()
 
 // WithHTTPClient returns Hammer client with custom HTTPClient
-WithHTTPClient(\*http.Client)
+WithHTTPClient(*http.Client)
 
 // Execute the Request
-Execute(\*Request)
+Execute(*Request)
 
 // Execute the Request and unmarshal into map or struct provided with unmarshalInto. Please See recipes.
-ExecuteInto(\*Request,unmarshalInto interface{})
+ExecuteInto(*Request,unmarshalInto interface{})
 
 ```
 
@@ -88,7 +88,7 @@ WithURL(value string)
 WithBasicAuth(username, password string)
 
 // WithTemplate will create a request with already created request. See example below.
-WithTemplate(tempRequest \*Request)
+WithTemplate(tempRequest *Request)
 
 ```
 
