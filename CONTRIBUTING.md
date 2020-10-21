@@ -20,6 +20,31 @@ We use github to host code, to track issues and feature requests, as well as acc
 5. Make sure your code lints.
 6. Issue that pull request!
 
+## Commit Message Format
+
+We encourage the use of the following commit message template:
+
+```
+< Area of Code >: Short Description
+
+Detailed Description
+
+Fixes : #Issue ID
+
+author: username <email>
+```
+
+Example:
+```
+<Request builder>: Support for Request Context
+
+Adding support for Go-Context pattern.
+
+Fixes: #1234
+
+author : ShaileshSurya<ss.shailesh28@gmail.com>
+```
+
 ## Report bugs using Github's [issues](https://github.com/ShaileshSurya/hammer/issues)
 We use GitHub issues to track public bugs. Report a bug by opening a new issue. it's that easy!
 
