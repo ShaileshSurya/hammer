@@ -2,17 +2,17 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 
 	"github.com/ShaileshSurya/hammer"
 )
 
 func main() {
-	// init client
 	client := hammer.New()
 
-	// build request
 	request, err := hammer.RequestBuilder().
 		Get().
 		WithURL("http://echo.jsontest.com/Greeting/hello/place/world").
@@ -23,23 +23,24 @@ func main() {
 		log.Fatal(err)
 	}
 
-	// ExecuteInto a map[string]interface{}
-	responseMap := make(map[string]interface{})
-	_ = client.ExecuteInto(request, &responseMap)
+	// Execute the request and manually handle response
+	resp, err := client.Execute(request)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	fmt.Printf("%+v\n\n", responseMap)
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Fatal(err)
+	}
 
-	// ExecuteInto a struct
 	type HelloWorld struct {
 		Greeting string
 		Place    string
 	}
-
 	var hw HelloWorld
-	err = client.ExecuteInto(request, &hw)
+
+	err = json.Unmarshal(body, &hw)
 	if err != nil {
 		log.Fatal(err)
 	}
