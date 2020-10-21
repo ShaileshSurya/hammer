@@ -21,7 +21,7 @@ resp, err:= client.Execute(request)
 
 // or
 
-m := make(map[string]interface{})
+responseMap := make(map[string]interface{})
 err:= client.ExecuteInto(request, &m)
 
 // or
