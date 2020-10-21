@@ -127,3 +127,18 @@ employeeList := []Employee{}
 
 resp, err:= client.ExecuteInto(request,&EmployeeList)
 ```
+
+## Contributing
+
+1. Fork the repo and create your branch from master.
+2. If you've added code that should be tested, add tests.
+3. If you've changed APIs, update the documentation.
+4. Ensure the test suite passes.
+5. Make sure your code lints.
+6. Issue that pull request!
+
+View [CONTRIBUTING.md](CONTRIBUTING.md) to learn more about how to contribute.
+
+## License
+
+This project is open source and available under the [MIT License](LICENSE).
