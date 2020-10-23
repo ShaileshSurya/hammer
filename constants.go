@@ -13,6 +13,11 @@ const (
 	TRACE   = "TRACE"
 )
 
+// Pseudo-constants headers
+var headers = struct {
+	contextType string
+}{"Content-Type"}
+
 // Error
 const (
 	RespDecodeErrorx = "Error while decoding response to into struct"

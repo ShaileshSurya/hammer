@@ -81,6 +81,11 @@ func (r *Request) WithRequestBodyParams(key string, value interface{}) *Request 
 	return r
 }
 
+// WithFormValues ...
+func (r *Request) WithFormValues(key string, value interface{}) *Request {
+	return r.WithRequestBodyParams(key, value)
+}
+
 // WithURL ...
 func (r *Request) WithURL(value string) *Request {
 	r.url = value
@@ -136,6 +141,12 @@ func (r *Request) Head() *Request {
 func (r *Request) Post() *Request {
 	r.httpVerb = POST
 	return r
+}
+
+// PostForm ...
+func (r *Request) PostForm() *Request {
+	r.httpVerb = POST
+	return r.WithHeaders(headers.contextType, "application/x-www-form-urlencoded")
 }
 
 // Put ...

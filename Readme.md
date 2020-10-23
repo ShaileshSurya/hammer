@@ -37,6 +37,7 @@ err:= client.ExecuteInto(request, &responseModel)
 Get()
 Head()
 Post()
+PostForm()
 Put()
 Patch()
 Delete()
@@ -80,6 +81,9 @@ WithRequestParams(key string, value string)
 
 // WithRequestBodyParams ...
 WithRequestBodyParams(key string, value interface{})
+
+// WithFormValues ...
+WithFormValues(Key string, value interface{})
 
 // WithURL ...
 WithURL(value string)
