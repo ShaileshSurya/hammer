@@ -90,6 +90,21 @@ func TestWithRequestBodyParams(t *testing.T) {
 		t.Error("TestFailed:TestWithRequestBodyParams")
 	}
 }
+
+func TestWithFormValues(t *testing.T) {
+	key := "testKey"
+	value := "testValue"
+	req := RequestBuilder().WithFormValues(key, value)
+
+	if x, found := req.requestBodyParams[key]; found {
+		if x != value {
+			t.Error("TestFailed:TestWithFormValues")
+		}
+	} else {
+		t.Errorf("TestFailed:TestWithFormValues\n\tgot {%s} {%t}", x, found)
+	}
+}
+
 func TestWithContext(t *testing.T) {
 	ctxTest := context.Background()
 	req := RequestBuilder().WithContext(ctxTest)
@@ -167,6 +182,18 @@ func TestVerbs(t *testing.T) {
 		if req.httpVerb != verb {
 			t.Errorf("TestFailed:TestVerbs {%s}", verb)
 		}
+	}
+}
+
+func TestPostForm(t *testing.T) {
+	req := RequestBuilder().PostForm()
+
+	if req.httpVerb != POST {
+		t.Errorf("TestFailed:TestPostForm want httpVerb {%s}, got {%s}", POST, req.httpVerb)
+	}
+
+	if req.headers[headers.contextType] != "application/x-www-form-urlencoded" {
+		t.Error("TestFailed:TestPostForm")
 	}
 }
 
